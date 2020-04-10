@@ -29,6 +29,7 @@ composer create-project --prefer-dist moonofmylife/laravel-books books
 
 **Starting**
 - You must change the database settings in ```.env``` file (see ```.env.example```)
+- Start installing frontend dependencies and compiling: ```npm i && npm run dev```
 - Start database migrations: ```php artisan migrate```
 - Start seeding the database with test data: ```php artisan db:seed```
 - This command will start a development server at ```http://localhost:8000```:
@@ -40,6 +41,7 @@ php artisan serve
 **Starting with Docker**
 
 - You must change the database settings in ```.env``` file (see ```.env.docker.example```)
+- Start installing frontend dependencies and compiling: ```npm i && npm run dev```
 - Start the building docker containers ```docker-compose up -d --build```
 - Start database migrations: ```docker-compose exec backend php artisan migrate```
 - Start seeding the database with test data: ```docker-compose exec backend php artisan db:seed```
