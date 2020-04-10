@@ -17,7 +17,8 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
         "mariuzzo/laravel-js-localization": "^1.6",
-        "ext-json": "*"
+        "ext-json": "*",
+        "moonofmylife/laravel-books": "^1.0.0"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
