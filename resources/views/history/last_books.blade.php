@@ -11,6 +11,10 @@
             <div class="uk-card-body">
                 <h4 class="uk-card-title">@lang('pages.history.books.title')</h4>
 
+                <div class="uk-flex uk-flex-right uk-margin">
+                    <a href="{{ route('rents.create') }}" class="uk-button button-primary uk-width-1-1 uk-width-auto@s">@lang('buttons.rent')</a>
+                </div>
+
                 @if ($rents->isNotEmpty())
                     <div class="uk-overflow-auto">
                         <table class="uk-table uk-table-hover uk-table-middle uk-table-divider">
