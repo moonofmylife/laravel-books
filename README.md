@@ -8,7 +8,7 @@
 - View active readers (tenants).
 - View the latest rented books.
 
-##Installation & Requirements
+## Installation & Requirements
 
 ###### The Laravel 7 framework has a few system requirements ######
 > PHP >= 7.2.5  
@@ -52,7 +52,7 @@ admin@example.com
 admin
 ```
 
-##Todo
+## Todo
 - **Elasticsearch** for implementing quick search
 - **Redis**/**RabbitMQ** for Laravel Queue
 - **Memcached**
