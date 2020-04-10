@@ -2,10 +2,10 @@
 
 ## Possibilities of Project
 
-- Adding tenants.
+- Adding renters.
 - Adding books.
 - Book rental in realtime.
-- View active readers (tenants).
+- View active readers (renters).
 - View the latest rented books.
 
 ## Installation & Requirements
@@ -55,6 +55,7 @@ admin
 ```
 
 ## Todo
+- Roles
 - **Elasticsearch** for implementing quick search
 - **Redis**/**RabbitMQ** for Laravel Queue
 - **Memcached**
