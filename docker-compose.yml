@@ -1,0 +1,64 @@
+version: "3.7"
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/app/Frontend.Dockerfile
+    container_name: frontend
+    depends_on:
+      - backend
+    volumes:
+      - ./:/app
+    restart: always
+    networks:
+      - frontend
+  backend:
+    build:
+      context: .
+      dockerfile: docker/app/Backend.Dockerfile
+    container_name: backend
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+      - ./public/storage:/app/storage/app/public
+    working_dir: /app
+    networks:
+      - frontend
+      - backend
+  nginx:
+    build: docker/nginx
+    container_name: nginx
+    depends_on:
+      - backend
+    volumes:
+      - ./:/app
+      - ./storage/logs:/var/log/nginx
+    ports:
+      - 8008:80
+    networks:
+      - frontend
+      - backend
+  db:
+    image: postgres:alpine
+    container_name: db
+    env_file: docker/postgres/.env
+    volumes:
+      - ./database/docker_pgdata:/var/lib/postgresql/data
+    ports:
+      - 5431:5432
+    restart: always
+    networks:
+      - backend
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080

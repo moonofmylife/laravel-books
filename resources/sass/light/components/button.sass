@@ -1,0 +1,28 @@
+.uk-button, button
+    display: inline-flex
+    justify-content: center
+    align-items: center
+    height: 30px
+    line-height: unset
+    font-size: 0.7rem
+    font-weight: 500
+    border-radius: 4px
+    &:focus
+        outline: none
+.button-primary
+    color: #ffffff
+    background-color: $primary-color
+    &:hover
+        color: #ffffff
+        background-color: $primary-hover-color
+    &.uk-disabled
+        background-color: lighten($primary-color, 10)
+    svg[data-svg=spinner]
+        margin-left: 5px
+
+.button-secondary
+    color: $primary-color
+    background: #ffffff
+    &:hover
+        color: $primary-hover-color
+        background: darken(#ffffff, 5)

@@ -1,0 +1,17 @@
+@media screen and (max-width: 492px)
+    .grid-form-buttons
+        display: flex
+        flex-direction: column
+
+.grid-form
+    .uk-input, .uk-select, .uk-textarea, .uk-label, .uk-form-custom, .uk-form-control
+        &:not(:last-child)
+            margin-bottom: 15px
+    .uk-textarea
+        min-height: 200px
+        height: 100%
+        resize: none
+    &-buttons
+        margin-top: 20px
+        a, button
+            margin: 5px

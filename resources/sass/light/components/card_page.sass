@@ -1,0 +1,43 @@
+.card-page
+    .uk-card
+        .uk-card-media-top.header-card-image
+                display: flex
+                flex-direction: column
+                align-items: center
+                padding: 30px
+                img
+                    width: calc(100px + 15vw)
+        .uk-card-media-top.book-card-cover > img
+                width: 100%
+        .uk-card-title
+            font-weight: 800
+            text-align: center
+        .uk-input, .uk-select:not([multiple]):not([size])
+            height: 30px
+    .empty-list
+        .uk-button-text
+            vertical-align: unset
+            font-size: unset
+            text-transform: unset
+        .uk-placeholder
+            color: #585555
+            padding: 10px 10px
+    .uk-card-body
+        padding: 10px 10px
+        .card-resource
+            position: relative
+            &-description
+                margin: 0
+                max-width: calc(100% - 57px)
+                color: #999
+                font-size: 14px
+            &-title
+                color: #191919
+                font-size: 16px
+                font-weight: 500
+                margin: 0
+            .uk-iconnav
+                position: absolute
+                right: 10px
+    .uk-table-hover > tr:hover, .uk-table-hover tbody tr:hover
+        background: #cdcaff94

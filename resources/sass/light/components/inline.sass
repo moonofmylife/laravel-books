@@ -1,0 +1,13 @@
+@media screen and (max-width: 492px)
+    .inline-list
+        display: flex
+        flex-direction: column
+        justify-content: center
+        margin: 0 !important
+        a, button, select, input
+            margin: 5px
+
+.inline-list
+    a, button, select, input
+        &:not(:last-child)
+            margin-right: 5px
