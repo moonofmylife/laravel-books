@@ -42,14 +42,18 @@ services:
       - ./:/app
       - ./storage/logs:/var/log/nginx
     ports:
-      - 8008:80
+      - 8000:80
     networks:
       - frontend
       - backend
   db:
     image: postgres:alpine
     container_name: db
-    env_file: docker/postgres/.env
+    environment:
+      - "POSTGRES_DB=${DB_DATABASE}"
+      - "POSTGRES_USER=${DB_USERNAME}"
+      - "POSTGRES_PASSWORD=${DB_PASSWORD}"
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
     volumes:
       - ./database/docker_pgdata:/var/lib/postgresql/data
     ports:
