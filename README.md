@@ -1,5 +1,15 @@
 <p align="center"><img src="https://i.ibb.co/fr2DPvP/laravel-books-logo-1.png" width="400"></p>
 
+## Demo
+
+Visit to view the demo: [http://larabooks.herokuapp.com](http://larabooks.herokuapp.com)
+
+**Test user:**
+```
+admin@example.com
+admin
+```
+
 ## Possibilities of Project
 
 - Adding renters.
@@ -46,13 +56,6 @@ php artisan serve
 - Start database migrations: ```docker-compose exec backend php artisan migrate```
 - Start seeding the database with test data: ```docker-compose exec backend php artisan db:seed```
 - The development server was started at ```http://localhost:8000```
-
-## Note
-**Test user:**
-```
-admin@example.com
-admin
-```
 
 ## Todo
 - Roles
