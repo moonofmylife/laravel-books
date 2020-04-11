@@ -68,7 +68,9 @@ class RentersController extends Controller
      */
     public function show(Request $request, Renter $renter)
     {
-        $rents = $renter->rents()->paginate($request->get('limit', 10))
+        $rents = $renter->rents()
+            ->orderBy('updated_at', 'desc')
+            ->paginate($request->get('limit', 10))
             ->onEachSide(1);
 
         return view('renters.show', compact('renter', 'rents'));
