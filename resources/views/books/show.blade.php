@@ -57,10 +57,12 @@
                     </div>
                 </div>
 
-                <div class="uk-width-1-1 uk-grid book-description">
-                    <h4 class="uk-text-bold">@lang('models.book.description'):</h4>
-                    <p class="uk-margin">{!! $book->description !!}</p>
-                </div>
+                @if ($book->description)
+                    <div class="uk-width-1-1 uk-grid book-description">
+                        <h4 class="uk-text-bold">@lang('models.book.description'):</h4>
+                        <p class="uk-margin">{!! $book->description !!}</p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
