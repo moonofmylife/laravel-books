@@ -17,7 +17,7 @@ class CreateRentsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('book_id');
             $table->unsignedBigInteger('renter_id');
-            $table->unsignedInteger('deposit');
+            $table->unsignedFloat('deposit');
             $table->unsignedInteger('books_count')->default(1);
             $table->unsignedInteger('period')->default(1);
             $table->timestamp('expired_at');
