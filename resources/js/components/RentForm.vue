@@ -186,12 +186,16 @@ export default {
       })
     },
     selectRenter(renter) {
-      this.form.renter_id = renter.id;
+      if (renter) {
+        this.form.renter_id = renter.id;
+      }
     },
     selectBook(book) {
       this.selectedBook = book;
-      this.form.book_id = book.id;
-      this.calculation();
+      if (book) {
+        this.form.book_id = book.id;
+        this.calculation();
+      }
     },
     calculation() {
       if (this.loading) {
