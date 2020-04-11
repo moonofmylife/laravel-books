@@ -38,7 +38,7 @@
                     <strong class="uk-text-danger">{{ error('books_count') }}</strong>
                 </span>
 
-                <input v-model.number="form.period" type="number" step="0.01" :placeholder="lang.get('models.rent.period')" class="uk-input" :class="{ 'uk-form-danger' : error('period') }" name="period" required>
+                <input v-model.number="form.period" type="number" :placeholder="lang.get('models.rent.period')" class="uk-input" :class="{ 'uk-form-danger' : error('period') }" name="period" required>
 
                 <span v-if="error('period')" class="invalid-feedback" role="alert">
                     <strong class="uk-text-danger">{{ error('period') }}</strong>
@@ -50,7 +50,7 @@
                     <strong class="uk-text-danger">{{ error('deposit') }}</strong>
                 </span>
 
-                <p class="uk-text-meta uk-margin-remove" v-if="cost.minDeposit" v-html="lang.get('pages.rents.min_deposit_alert', { deposit: cost.minDeposit })"></p>
+                <p class="uk-text-meta uk-margin-remove" v-if="cost.minDeposit" v-html="lang.get('pages.rents.min_deposit_alert', { deposit: round(cost.minDeposit) })"></p>
                 <p class="uk-text-meta uk-margin-remove" v-else v-html="lang.get('pages.rents.min_deposit_alert_0')"></p>
             </div>
             <div class="cost-box">
@@ -153,7 +153,7 @@ export default {
   computed: {
     finallyDeposit: {
       get() {
-        return this.loading ? this.cost.deposit : this.form.deposit || 0;
+        return this.round(this.loading ? this.cost.deposit : this.form.deposit || 0);
       }
     }
   },
@@ -221,6 +221,9 @@ export default {
     },
     clearError(input) {
         _set(this.errors, input, null);
+    },
+    round(value) {
+      return Math.trunc(value * 100) / 100;
     }
   }
 }
