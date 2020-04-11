@@ -39,7 +39,7 @@ class MinimalDepositRule implements Rule
     public function passes($attribute, $value)
     {
         $rent = $this->request->get('books_count') * $this->book->cost * $this->request->get('period');
-        $min = $rent * 0.3;
+        $min = floor(($rent * 0.3) * 100) / 100;
 
         if ($value < $min) {
             return false;

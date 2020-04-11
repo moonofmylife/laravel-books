@@ -38,7 +38,7 @@
                     <strong class="uk-text-danger">{{ error('books_count') }}</strong>
                 </span>
 
-                <input v-model.number="form.period" type="number" step="0.01" :placeholder="lang.get('models.rent.period')" class="uk-input" :class="{ 'uk-form-danger' : error('period') }" name="period" required>
+                <input v-model.number="form.period" type="number" :placeholder="lang.get('models.rent.period')" class="uk-input" :class="{ 'uk-form-danger' : error('period') }" name="period" required>
 
                 <span v-if="error('period')" class="invalid-feedback" role="alert">
                     <strong class="uk-text-danger">{{ error('period') }}</strong>
@@ -50,7 +50,7 @@
                     <strong class="uk-text-danger">{{ error('deposit') }}</strong>
                 </span>
 
-                <p class="uk-text-meta uk-margin-remove" v-if="cost.minDeposit" v-html="lang.get('pages.rents.min_deposit_alert', { deposit: cost.minDeposit })"></p>
+                <p class="uk-text-meta uk-margin-remove" v-if="cost.minDeposit" v-html="lang.get('pages.rents.min_deposit_alert', { deposit: floor(cost.minDeposit) })"></p>
                 <p class="uk-text-meta uk-margin-remove" v-else v-html="lang.get('pages.rents.min_deposit_alert_0')"></p>
             </div>
             <div class="cost-box">
@@ -81,149 +81,156 @@
 </template>
 
 <script>
-import { debounce, get as _get, set as _set, toArray } from 'lodash'
+  import { debounce, get as _get, set as _set, toArray } from 'lodash'
 
-export default {
-  name: "FormComponent",
-  props: {
-    action: {
-      type: String,
-      required: true
-    },
-    rent: {
-      type: Object,
-      default: null
-    },
-    renter: {
-      type: Object,
-      default: null
-    },
-    book: {
-      type: Object,
-      default: null
-    },
-    rentersUrl: {
-      type: String,
-      required: true
-    },
-    booksUrl: {
-      type: String,
-      required: true
-    }
-  },
-  data() {
-    return {
-      form: {
-        renter_id: '',
-        book_id: '',
-        books_count: '',
-        period: '',
-        deposit: ''
+  export default {
+    name: "FormComponent",
+    props: {
+      action: {
+        type: String,
+        required: true
       },
-      errors: {},
-      selectedBook: {},
-      cost: {
-        rent: 0,
-        minDeposit: 0,
-        deposit: 0,
-        total: 0
+      rent: {
+        type: Object,
+        default: null
       },
-      loading: false
-    }
-  },
-  created() {
-    if (this.rent) {
-      this.form = { ...this.rent };
-    }
-  },
-  watch: {
-    'form.books_count': function() {
-      this.calculation();
-      this.clearError('books_count');
-    },
-    'form.period': function() {
-      this.calculation();
-      this.clearError('period');
-    },
-    'form.deposit': debounce(function() {
-      this.calculation();
-      this.clearError('deposit');
-    }, 600),
-  },
-  computed: {
-    finallyDeposit: {
-      get() {
-        return this.loading ? this.cost.deposit : this.form.deposit || 0;
+      renter: {
+        type: Object,
+        default: null
+      },
+      book: {
+        type: Object,
+        default: null
+      },
+      rentersUrl: {
+        type: String,
+        required: true
+      },
+      booksUrl: {
+        type: String,
+        required: true
       }
-    }
-  },
-  methods: {
-    submit() {
-      if (!this.isValid(true) || this.loading) {
-        return;
+    },
+    data() {
+      return {
+        form: {
+          renter_id: '',
+          book_id: '',
+          books_count: '',
+          period: '',
+          deposit: ''
+        },
+        errors: {},
+        selectedBook: {},
+        cost: {
+          rent: 0,
+          minDeposit: 0,
+          deposit: 0,
+          total: 0
+        },
+        loading: false
       }
+    },
+    created() {
+      if (this.rent) {
+        this.form = { ...this.rent };
+      }
+    },
+    watch: {
+      'form.books_count': function() {
+        this.calculation();
+        this.clearError('books_count');
+      },
+      'form.period': function() {
+        this.calculation();
+        this.clearError('period');
+      },
+      'form.deposit': debounce(function() {
+        this.calculation();
+        this.clearError('deposit');
+      }, 600),
+    },
+    computed: {
+      finallyDeposit: {
+        get() {
+          return this.floor(this.loading ? this.cost.deposit : this.form.deposit || 0);
+        }
+      }
+    },
+    methods: {
+      submit() {
+        if (!this.isValid(true) || this.loading) {
+          return;
+        }
 
-      this.loading = true;
-      this.cost.deposit = this.form.deposit;
-      this.$refs.submit.setAttribute('uk-spinner', 'ratio: .5');
+        this.loading = true;
+        this.cost.deposit = this.form.deposit;
+        this.$refs.submit.setAttribute('uk-spinner', 'ratio: .5');
 
-      axios[this.rent ? 'put' : 'post'](this.action, this.form).then(({ data }) => {
-        setTimeout(() => {
+        axios[this.rent ? 'put' : 'post'](this.action, this.form).then(({ data }) => {
+          setTimeout(() => {
+            this.loading = false;
+            this.$refs.submit.removeAttribute('uk-spinner');
+
+            if (data.redirect_url) {
+              window.location.href = data.redirect_url;
+            }
+          }, 500)
+        }).catch(({ response }) => {
           this.loading = false;
           this.$refs.submit.removeAttribute('uk-spinner');
 
-          if (data.redirect_url) {
-            window.location.href = data.redirect_url;
+          if (response.status === 422 && response.data.errors) {
+            this.errors = response.data.errors;
           }
-        }, 500)
-      }).catch(({ response }) => {
-        this.loading = false;
-        this.$refs.submit.removeAttribute('uk-spinner');
-
-        if (response.status === 422 && response.data.errors) {
-          this.errors = response.data.errors;
+        })
+      },
+      selectRenter(renter) {
+        if (renter) {
+          this.form.renter_id = renter.id;
         }
-      })
-    },
-    selectRenter(renter) {
-      this.form.renter_id = renter.id;
-    },
-    selectBook(book) {
-      this.selectedBook = book;
-      this.form.book_id = book.id;
-      this.calculation();
-    },
-    calculation() {
-      if (this.loading) {
-        return;
-      }
-
-      if (this.isValid()) {
-        this.cost.rent = this.selectedBook.cost * this.form.books_count * this.form.period;
-        this.cost.minDeposit = this.cost.rent * 0.3;
-        this.cost.total = this.cost.rent + this.form.deposit  || this.cost.minDeposit;
-
-        if (this.form.deposit && this.form.deposit < this.cost.minDeposit) {
-          this.form.deposit = this.cost.deposit = this.cost.minDeposit;
+      },
+      selectBook(book) {
+        this.selectedBook = book;
+        if (book) {
+          this.form.book_id = book.id;
+          this.calculation();
         }
-      } else {
-        for (const prop of Object.getOwnPropertyNames(this.cost)) {
-          this.cost[prop] = 0;
+      },
+      calculation() {
+        if (this.loading) {
+          return;
         }
-      }
-    },
-    isValid(deposit = false) {
-      return deposit ? this.form.books_count && this.form.period && this.selectedBook  && this.form.deposit
-        : this.form.books_count && this.form.period && this.selectedBook;
-    },
-    error(input) {
-      return toArray(_get(this.errors, input)).pop();
-    },
-    clearError(input) {
+
+        if (this.isValid()) {
+          this.cost.rent = this.selectedBook.cost * this.form.books_count * this.form.period;
+          this.cost.minDeposit = this.cost.rent * 0.3;
+          this.cost.total = this.floor(this.cost.rent + this.form.deposit  || this.cost.minDeposit);
+
+          if (this.form.deposit && this.form.deposit < this.cost.minDeposit) {
+            this.form.deposit = this.floor(this.cost.deposit = this.cost.minDeposit);
+          }
+        } else {
+          for (const prop of Object.getOwnPropertyNames(this.cost)) {
+            this.cost[prop] = 0;
+          }
+        }
+      },
+      isValid(deposit = false) {
+        return deposit ? this.form.books_count && this.form.period && this.selectedBook  && this.form.deposit
+          : this.form.books_count && this.form.period && this.selectedBook;
+      },
+      error(input) {
+        return toArray(_get(this.errors, input)).pop();
+      },
+      clearError(input) {
         _set(this.errors, input, null);
+      },
+      floor(value) {
+        return Math.floor(value * 100) / 100;
+      }
     }
   }
-}
 </script>
 
 <style scoped lang="sass">

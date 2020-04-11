@@ -2081,7 +2081,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   computed: {
     finallyDeposit: {
       get: function get() {
-        return this.loading ? this.cost.deposit : this.form.deposit || 0;
+        return this.floor(this.loading ? this.cost.deposit : this.form.deposit || 0);
       }
     }
   },
@@ -2119,12 +2119,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     selectRenter: function selectRenter(renter) {
-      this.form.renter_id = renter.id;
+      if (renter) {
+        this.form.renter_id = renter.id;
+      }
     },
     selectBook: function selectBook(book) {
       this.selectedBook = book;
-      this.form.book_id = book.id;
-      this.calculation();
+
+      if (book) {
+        this.form.book_id = book.id;
+        this.calculation();
+      }
     },
     calculation: function calculation() {
       if (this.loading) {
@@ -2134,10 +2139,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (this.isValid()) {
         this.cost.rent = this.selectedBook.cost * this.form.books_count * this.form.period;
         this.cost.minDeposit = this.cost.rent * 0.3;
-        this.cost.total = this.cost.rent + this.form.deposit || this.cost.minDeposit;
+        this.cost.total = this.floor(this.cost.rent + this.form.deposit || this.cost.minDeposit);
 
         if (this.form.deposit && this.form.deposit < this.cost.minDeposit) {
-          this.form.deposit = this.cost.deposit = this.cost.minDeposit;
+          this.form.deposit = this.floor(this.cost.deposit = this.cost.minDeposit);
         }
       } else {
         var _iteratorNormalCompletion = true;
@@ -2174,6 +2179,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     clearError: function clearError(input) {
       Object(lodash__WEBPACK_IMPORTED_MODULE_0__["set"])(this.errors, input, null);
+    },
+    floor: function floor(value) {
+      return Math.floor(value * 100) / 100;
     }
   }
 });
@@ -34736,7 +34744,6 @@ var render = function() {
                 class: { "uk-form-danger": _vm.error("period") },
                 attrs: {
                   type: "number",
-                  step: "0.01",
                   placeholder: _vm.lang.get("models.rent.period"),
                   name: "period",
                   required: ""
@@ -34824,7 +34831,7 @@ var render = function() {
                     domProps: {
                       innerHTML: _vm._s(
                         _vm.lang.get("pages.rents.min_deposit_alert", {
-                          deposit: _vm.cost.minDeposit
+                          deposit: _vm.floor(_vm.cost.minDeposit)
                         })
                       )
                     }
@@ -48399,9 +48406,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /app/resources/js/app.js */"./resources/js/app.js");
-__webpack_require__(/*! /app/resources/sass/app.scss */"./resources/sass/app.scss");
-module.exports = __webpack_require__(/*! /app/resources/sass/fonts.scss */"./resources/sass/fonts.scss");
+__webpack_require__(/*! /Users/moonofmylife/Desktop/My Projects/Laravel/books/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /Users/moonofmylife/Desktop/My Projects/Laravel/books/resources/sass/app.scss */"./resources/sass/app.scss");
+module.exports = __webpack_require__(/*! /Users/moonofmylife/Desktop/My Projects/Laravel/books/resources/sass/fonts.scss */"./resources/sass/fonts.scss");
 
 
 /***/ })
